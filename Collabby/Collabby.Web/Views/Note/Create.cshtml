@@ -1,4 +1,4 @@
-﻿@model Collabby.Domain.Entities.Note
+﻿@* @model Collabby.Domain.Entities.Note
 
 @{
     ViewData["Title"] = "Create";
@@ -49,4 +49,98 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+ *@
+
+@model NoteViewModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Notas</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label class="control-label">Usuario</label>
+            <input class="form-control" id="userId" />
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Titulo</label>
+            <input class="form-control" id="title" />
+
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Contenido</label>
+            <input class="form-control" id="content" />
+
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">CrearNota</label>
+            <input class="form-control" id="CreatedAt" />
+
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">ActualizarNota</label>
+            <input class="form-control" id="UpdatedAt" />
+
+        </div>
+
+        <!-- <div class="form-group">
+            <label class="control-label">Fecha Registro</label>
+            <input asp-for="FechaRegistro" class="form-control" id="Content" />
+        </div> 
+        -->
+        <div class="form-group">
+            <button onclick="crearNota()" class="btn btn-success"><i class="bi bi-plus-circle"></i>Crear</button>
+        </div>
+
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Regresar<i class="bi bi-arrow-90deg-left"></i></a>
+</div>
+
+@section Scripts {
+    <script>
+
+
+        function crearNota() {
+            let entity = {
+                userId: $("#userId").val(),
+                title: $("#title").val(),
+                content: $("#content").val(),
+                CreatedAt: $("#CreatedAt").val(),
+                UpdatedAt: $("#UpdatedAt").val(),
+            };
+            console.log(entity);
+            $.ajax({
+                url: `${APINote}/Add`,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(entity),
+                success: function (response) {
+                    if (response.success) {
+                        window.location.href = "/Notes/Index";
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Error:", status, error);
+                    alert("An error occurred. Please try again.");
+                }
+            });
+        }
+    </script>
 }

@@ -1,4 +1,4 @@
-﻿@model Collabby.Domain.Entities.Note
+﻿@* @model Collabby.Domain.Entities.Note
 
 @{
     ViewData["Title"] = "Details";
@@ -46,3 +46,59 @@
     <a asp-action="Edit" asp-route-id="@Model?.NoteId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+ *@
+ @model NoteViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detalles</h1>
+
+<div>
+    <h4>Notas</h4>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm-2">Titulo</dt>
+        <dd class="col-sm-10" id="title"></dd>
+
+        <dt class="col-sm-2">Contenido</dt>
+        <dd class="col-sm-10" id="content"></dd>
+
+        <dt class="col-sm-2">CrearNota</dt>
+        <dd class="col-sm-10" id="createdAt"></dd>
+
+        <dt class="col-sm-2">ActualizarNota</dt>
+        <dd class="col-sm-10" id="updatedAt"></dd>
+
+        <dt class="col-sm-2">Usuario</dt>
+        <dd class="col-sm-10" id="user"></dd>
+
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10" id="email"></dd>
+
+    </dl>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">Regresar<i class="bi bi-arrow-90deg-left"></i></a>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            loadDetails(@Model.Id);
+        });
+
+        function loadDetails(id) {
+            $.get(`${APINote}/Get/${id}`, function (entity) {
+                $("#title").text(entity.title);
+                $("#content").text(entity.content);
+                $("#createdAt").text(entity.createdAt);
+                $("#updatedAt").text(entity.updatedAt);
+                $("#user").text(entity.user);
+                $("#Email").text(entity.Email);
+            });
+        }
+    </script>
+}

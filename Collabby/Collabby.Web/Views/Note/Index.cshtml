@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Collabby.Domain.Entities.Note>
+﻿@* @model IEnumerable<Collabby.Domain.Entities.Note>
 
 @{
     ViewData["Title"] = "Index";
@@ -57,3 +57,69 @@
 }
     </tbody>
 </table>
+ *@
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Notas</h1>
+
+<p>
+    <a class="btn btn-primary" href="/Notes/Create"><i class="bi bi-plus-circle"></i>Crear</a>
+</p>
+
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Titulo</th>
+            <th>Contenido</th>
+            <th>Crear Nota</th>
+            <th>Actualizar Nota</th>
+            <th>Usuario</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody id="noteTable">
+    </tbody>
+</table>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            cargarNote();
+        });
+
+        function cargarNote() {
+            console.log(${APINote}/GetAll);
+
+            $.get(${APINote}/GetAll, {filter: ""}, function (notes) {
+                let rows = "";
+                 notes.forEach(
+                     (notes) => {
+                         rows +=
+                         <tr>
+                             <td>${notes.titles}</td>
+                             <td>${notes.content}</td>
+                             <td>${notes.createdAt}</td>
+                             <td>${notes.updatedAt}</td>
+                             <td>${notes.user.email}</td>
+                             <td>
+                                <a href="/Notes/Edit/${notes.id}" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a> |
+                                <a href="/Notes/Details/${notes.id}" class="btn btn-info"><i class="bi bi-info-circle"></i></a> |
+                                <a href="/Notes/Delete/${notes.id}" class="btn btn-danger"><i class="bi bi-x-circle"></i></a>
+                             </td>
+                         </tr>;
+                     }
+                 );
+
+                 $("#noteTable").html(rows);
+
+                }
+            );
+        }
+    </script>
+}
