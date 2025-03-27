@@ -10,23 +10,22 @@ using Collabby.infrastructure.Context;
 
 namespace Collabby.Web.Controllers
 {
-    public class NoteController : Controller
+    public class UserController : Controller
     {
         private readonly CollabbyContext _context;
 
-        public NoteController(CollabbyContext context)
+        public UserController(CollabbyContext context)
         {
             _context = context;
         }
 
-        // GET: Note
+        // GET: User
         public async Task<IActionResult> Index()
         {
-            var collabbyContext = _context.Notes.Include(n => n.User);
-            return View(await collabbyContext.ToListAsync());
+            return View(await _context.Users.ToListAsync());
         }
 
-        // GET: Note/Details/5
+        // GET: User/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +33,39 @@ namespace Collabby.Web.Controllers
                 return NotFound();
             }
 
-            var note = await _context.Notes
-                .Include(n => n.User)
-                .FirstOrDefaultAsync(m => m.NoteId == id);
-            if (note == null)
+            var user = await _context.Users
+                .FirstOrDefaultAsync(m => m.UserId == id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(note);
+            return View(user);
         }
 
-        // GET: Note/Create
+        // GET: User/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email");
             return View();
         }
 
-        // POST: Note/Create
+        // POST: User/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("NoteId,UserId,Title,Content,CreatedAt,UpdatedAt")] Note note)
+        public async Task<IActionResult> Create([Bind("UserId,FirstName,LastName,Email,PasswordHash,CreatedAt,UpdatedAt")] User user)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(note);
+                _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email", note.UserId);
-            return View(note);
+            return View(user);
         }
 
-        // GET: Note/Edit/5
+        // GET: User/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +73,22 @@ namespace Collabby.Web.Controllers
                 return NotFound();
             }
 
-            var note = await _context.Notes.FindAsync(id);
-            if (note == null)
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email", note.UserId);
-            return View(note);
+            return View(user);
         }
 
-        // POST: Note/Edit/5
+        // POST: User/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("NoteId,UserId,Title,Content,CreatedAt,UpdatedAt")] Note note)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,FirstName,LastName,Email,PasswordHash,CreatedAt,UpdatedAt")] User user)
         {
-            if (id != note.NoteId)
+            if (id != user.UserId)
             {
                 return NotFound();
             }
@@ -102,12 +97,12 @@ namespace Collabby.Web.Controllers
             {
                 try
                 {
-                    _context.Update(note);
+                    _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!NoteExists(note.NoteId))
+                    if (!UserExists(user.UserId))
                     {
                         return NotFound();
                     }
@@ -118,11 +113,10 @@ namespace Collabby.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email", note.UserId);
-            return View(note);
+            return View(user);
         }
 
-        // GET: Note/Delete/5
+        // GET: User/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,35 +124,34 @@ namespace Collabby.Web.Controllers
                 return NotFound();
             }
 
-            var note = await _context.Notes
-                .Include(n => n.User)
-                .FirstOrDefaultAsync(m => m.NoteId == id);
-            if (note == null)
+            var user = await _context.Users
+                .FirstOrDefaultAsync(m => m.UserId == id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(note);
+            return View(user);
         }
 
-        // POST: Note/Delete/5
+        // POST: User/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var note = await _context.Notes.FindAsync(id);
-            if (note != null)
+            var user = await _context.Users.FindAsync(id);
+            if (user != null)
             {
-                _context.Notes.Remove(note);
+                _context.Users.Remove(user);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool NoteExists(int id)
+        private bool UserExists(int id)
         {
-            return _context.Notes.Any(e => e.NoteId == id);
+            return _context.Users.Any(e => e.UserId == id);
         }
     }
 }

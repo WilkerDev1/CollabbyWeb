@@ -1,4 +1,4 @@
-﻿@* @model Collabby.Domain.Entities.Note
+﻿@model Collabby.Domain.Entities.Note
 
 @{
     ViewData["Title"] = "Delete";
@@ -49,81 +49,3 @@
         <a asp-action="Index">Back to List</a>
     </form>
 </div>
- *@
-
- @model NoteViewModel
-
-@{
-    ViewData["Title"] = "Delete";
-}
-
-<h3>Seguro que quieres eliminar?</h3>
-
-<div>
-    <h4>Notas</h4>
-    <hr />
-
-    <dl class="row">
-        <dt class="col-sm-2">Titulo</dt>
-        <dd class="col-sm-10" id="title"></dd>
-
-        <dt class="col-sm-2">Contenido</dt>
-        <dd class="col-sm-10" id="content"></dd>
-
-        <dt class="col-sm-2">CrearNota</dt>
-        <dd class="col-sm-10" id="createdAt"></dd>
-
-        <dt class="col-sm-2">ActualizarNota</dt>
-        <dd class="col-sm-10" id="updatedAt"></dd>
-
-        <dt class="col-sm-2">Usuario</dt>
-        <dd class="col-sm-10" id="user"></dd>
-
-        <dt class="col-sm-2">Email</dt>
-        <dd class="col-sm-10" id="email"></dd>
-
-    </dl>
-
-    <div class="form-group">
-        <button onclick="eliminarNote()" class="btn btn-danger"><i class="bi bi-x-circle"></i>Eliminar</button> |
-        <a asp-action="Index">Regresar<i class="bi bi-arrow-90deg-left"></i></a>
-    </div>
-</div>
-
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            cargarNote(@Model.Id);
-        });
-
-        function cargarNote(id) {
-            $.get(`${APINote}/Get/${id}`, function (entity) {
-                $("#title").html(entity.title);
-                $("#content").html(entity.content);
-                $("#createdAt").html(entity.createdAt);
-                $("#updatedAt").html(entity.updatedAt);
-                $("#user").html(entity.user);
-                $("#email").html(entity.email);
-            });
-        }
-
-        function eliminarNote() {
-            $.ajax({
-                url: `${APIestudiante}/Delete/${@Model.Id}`,
-                type: "DELETE",
-                contentType: "application/json",
-                success: function (response) {
-                    if (response.success) {
-                        window.location.href = "/Notes/Index";
-                    } else {
-                        alert("Error: " + response.message);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("AJAX Error:", status, error);
-                    alert("An error occurred. Please try again.");
-                }
-            });
-        }
-    </script>
-}

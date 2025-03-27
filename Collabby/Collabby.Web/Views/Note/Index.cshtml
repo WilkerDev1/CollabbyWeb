@@ -1,125 +1,67 @@
-﻿@* @model IEnumerable<Collabby.Domain.Entities.Note>
-
+﻿@model IEnumerable<Collabby.Domain.Entities.Note>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Notas";
 }
 
-<h1>Index</h1>
+<div class="container mt-4">
+    <!-- Encabezado del tablero -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Notas</h1>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i>
+            Crear Nueva Nota
+        </a>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Content)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Email)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.NoteId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.NoteId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.NoteId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
- *@
-
-@{
-    ViewData["Title"] = "Index";
-}
-
-<h1>Notas</h1>
-
-<p>
-    <a class="btn btn-primary" href="/Notes/Create"><i class="bi bi-plus-circle"></i>Crear</a>
-</p>
-
-
-<table class="table table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>Titulo</th>
-            <th>Contenido</th>
-            <th>Crear Nota</th>
-            <th>Actualizar Nota</th>
-            <th>Usuario</th>
-            <th></th>
-        </tr>
-    </thead>
-
-    <tbody id="noteTable">
-    </tbody>
-</table>
-
-
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            cargarNote();
-        });
-
-        function cargarNote() {
-            console.log(${APINote}/GetAll);
-
-            $.get(${APINote}/GetAll, {filter: ""}, function (notes) {
-                let rows = "";
-                 notes.forEach(
-                     (notes) => {
-                         rows +=
-                         <tr>
-                             <td>${notes.titles}</td>
-                             <td>${notes.content}</td>
-                             <td>${notes.createdAt}</td>
-                             <td>${notes.updatedAt}</td>
-                             <td>${notes.user.email}</td>
-                             <td>
-                                <a href="/Notes/Edit/${notes.id}" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a> |
-                                <a href="/Notes/Details/${notes.id}" class="btn btn-info"><i class="bi bi-info-circle"></i></a> |
-                                <a href="/Notes/Delete/${notes.id}" class="btn btn-danger"><i class="bi bi-x-circle"></i></a>
-                             </td>
-                         </tr>;
-                     }
-                 );
-
-                 $("#noteTable").html(rows);
-
-                }
-            );
+    <!-- Grid de tarjetas: agregamos un id para poder inicializar SortableJS -->
+    <div class="row" id="notesBoard">
+        @foreach (var item in Model)
+        {
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-4 note-item">
+                <div class="card h-100 shadow-sm">
+                    <!-- Cuerpo de la tarjeta -->
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        <p class="card-text">
+                            @((!string.IsNullOrEmpty(item.Content) && item.Content.Length > 100)
+                                ? item.Content.Substring(0, 100) + "..."
+                                : item.Content)
+                        </p>
+                    </div>
+                    <!-- Pie de la tarjeta con datos de usuario y botones de acción -->
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <i class="bi bi-person me-1"></i>@item.User.Email
+                        </small>
+                        <div class="btn-group btn-group-sm">
+                            <a asp-action="Edit" asp-route-id="@item.NoteId" class="btn btn-outline-primary" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.NoteId" class="btn btn-outline-info" title="Detalles">
+                                <i class="bi bi-info-circle"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.NoteId" class="btn btn-outline-danger" title="Eliminar">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
-    </script>
-}
+    </div>
+</div>
+
+<!-- Incluimos SortableJS desde CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var el = document.getElementById('notesBoard');
+        // Inicializamos Sortable en el contenedor de notas
+        var sortable = Sortable.create(el, {
+            animation: 150,         // animación suave
+            ghostClass: 'bg-light'  // clase aplicada al elemento mientras se arrastra
+            // Opcionalmente, puedes agregar eventos como onEnd para capturar el nuevo orden
+            // onEnd: function (evt) { ... }
+        });
+    });
+</script>
