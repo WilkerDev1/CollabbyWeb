@@ -1,89 +1,59 @@
 ﻿@model IEnumerable<Collabby.Domain.Entities.User>
-
 @{
     ViewData["Title"] = "Usuarios";
 }
 
 <div class="container mt-5">
-    <div class="card shadow rounded">
-        <!-- Cabecera del card con fondo primario, texto blanco y acción para crear nuevo registro -->
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h2 class="mb-0">Usuarios</h2>
-            <a asp-action="Create" class="btn btn-light">
-                <i class="bi bi-plus-circle me-1"></i>
-                Crear Nuevo
-            </a>
-        </div>
-        <div class="card-body">
-            <!-- Tabla responsive para visualizar los usuarios -->
-            <div class="table-responsive">
-                <table class="table table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.FirstName)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.LastName)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Email)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.PasswordHash)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.CreatedAt)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.UpdatedAt)
-                            </th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FirstName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.LastName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Email)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.PasswordHash)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CreatedAt)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.UpdatedAt)
-                                </td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-pencil"></i>
-                                            <span class="d-none d-md-inline ms-1">Edit</span>
-                                        </a>
-                                        <a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-sm btn-outline-info">
-                                            <i class="bi bi-info-circle"></i>
-                                            <span class="d-none d-md-inline ms-1">Details</span>
-                                        </a>
-                                        <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash"></i>
-                                            <span class="d-none d-md-inline ms-1">Delete</span>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold text-primary">
+            <i class="bi bi-people me-2"></i>Usuarios
+        </h1>
+        <a asp-action="Create" class="btn btn-success fab-top">
+            <i class="bi bi-plus-circle me-1"></i> Crear Usuario
+        </a>
+    </div>
+
+    <!-- Zona arrastrable de tarjetas de usuario -->
+    <div id="userList" class="d-flex flex-column gap-3">
+        @foreach (var user in Model)
+        {
+            <div class="user-card card shadow-sm border-0 rounded-4 p-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                <!-- Info del usuario -->
+                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3">
+                    <i class="bi bi-person-circle fs-2 text-primary"></i>
+                    <div>
+                        <h5 class="mb-1">@user.FirstName @user.LastName</h5>
+                        <p class="mb-0 text-muted">@user.Email</p>
+                        <small class="text-secondary">Creado: @user.CreatedAt.ToShortDateString()</small>
+                    </div>
+                </div>
+
+                <!-- Acciones -->
+                <div class="btn-group mt-3 mt-md-0">
+                    <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <a asp-action="Details" asp-route-id="@user.UserId" class="btn btn-sm btn-outline-info">
+                        <i class="bi bi-info-circle"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@user.UserId" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </div>
             </div>
-        </div>
+        }
     </div>
 </div>
+
+<!-- SortableJS para arrastrar usuarios -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var el = document.getElementById('userList');
+        Sortable.create(el, {
+            animation: 150,
+            ghostClass: 'bg-light'
+        });
+    });
+</script>

@@ -1,48 +1,108 @@
 ﻿@model Collabby.Domain.Entities.Note
+@using System.Globalization
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles de la Nota";
+    var cultura = new CultureInfo("es-ES");
 }
 
-<h1>Details</h1>
+<style>
+    .note-details-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: #fdfdfd;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        font-family: 'Segoe UI', sans-serif;
+    }
 
-<div>
-    <h4>Note</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Content)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Email)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.NoteId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    .note-header {
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 2rem;
+    }
+
+        .note-header h2 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+    .note-meta {
+        font-size: 0.9rem;
+        color: #777;
+    }
+
+    .note-section {
+        margin-bottom: 1.5rem;
+    }
+
+        .note-section h4 {
+            font-size: 1rem;
+            color: #444;
+            margin-bottom: 0.3rem;
+        }
+
+    .note-content-box {
+        background-color: #fafafa;
+        padding: 1rem;
+        border-radius: 10px;
+        border: 1px solid #e6e6e6;
+        white-space: pre-wrap;
+    }
+
+    .note-footer {
+        margin-top: 2rem;
+        display: flex;
+        gap: 1rem;
+    }
+
+        .note-footer a {
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+    .edit-btn {
+        background-color: #4a90e2;
+        color: white;
+    }
+
+        .edit-btn:hover {
+            background-color: #357bd8;
+        }
+
+    .back-btn {
+        background-color: #e0e0e0;
+        color: #333;
+    }
+
+        .back-btn:hover {
+            background-color: #cacaca;
+        }
+</style>
+
+<div class="note-details-container">
+    <div class="note-header">
+        <h2>@Model.Title</h2>
+        <div class="note-meta">
+            Creado: @Model.CreatedAt.ToString("dd MMMM yyyy, HH:mm", cultura) ·
+            Última edición: @Model.UpdatedAt.ToString("dd MMMM yyyy, HH:mm", cultura)<br />
+            Usuario: <strong>@Model.User.Email</strong>
+        </div>
+    </div>
+
+    <div class="note-section">
+        <h4>Contenido</h4>
+        <div class="note-content-box">
+            @Model.Content
+        </div>
+    </div>
+
+    <div class="note-footer">
+        <a asp-action="Edit" asp-route-id="@Model?.NoteId" class="edit-btn">✏️ Editar</a>
+        <a asp-action="Index" class="back-btn">⬅️ Volver</a>
+    </div>
 </div>

@@ -1,22 +1,66 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
+/* Fondo con patrón sutil */
 body {
-  margin-bottom: 60px;
+    background-color: #f4f3ff;
+    background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+    background-repeat: repeat;
+    background-attachment: fixed;
 }
+
+/* Animación de entrada */
+.note-item {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hover elegante en las tarjetas */
+.card.transition {
+    transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+    .card.transition:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+    }
+
+/* Botones redondeados */
+.btn-outline-primary,
+.btn-outline-info,
+.btn-outline-danger {
+    border-radius: 50px;
+    padding: 0.4rem 0.6rem;
+}
+
+/* Botón flotante tipo FAB */
+.fab-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999;
+    border-radius: 50px;
+    padding: 12px 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    font-size: 1rem;
+}
+
+/* Ajuste para que el FAB no choque con el footer */
+.fab-btn {
+    bottom: 90px; /* lo alejamos del fondo un poco más */
+}
+
+.user-card {
+    background-color: white;
+    transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+    .user-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }

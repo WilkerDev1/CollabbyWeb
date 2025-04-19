@@ -3,35 +3,40 @@
     ViewData["Title"] = "Notas";
 }
 
-<div class="container mt-4">
+<!-- Fondo personalizado aplicado desde CSS -->
+
+<div class="container mt-5">
     <!-- Encabezado del tablero -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Notas</h1>
-        <a asp-action="Create" class="btn btn-success">
-            <i class="bi bi-plus-circle me-1"></i>
-            Crear Nueva Nota
+        <h1 class="fw-bold text-primary">
+            <i class="bi bi-journal-text me-2"></i>Notas
+        </h1>
+
+        <!-- FAB: botón para crear nueva nota -->
+        <a asp-action="Create" class="btn btn-success fab-top">
+            <i class="bi bi-plus-circle me-1"></i> Crear Nota
         </a>
     </div>
 
-    <!-- Grid de tarjetas: agregamos un id para poder inicializar SortableJS -->
+    <!-- Grid de tarjetas: cada tarjeta representa una nota -->
     <div class="row" id="notesBoard">
         @foreach (var item in Model)
         {
             <div class="col-sm-6 col-md-4 col-lg-3 mb-4 note-item">
-                <div class="card h-100 shadow-sm">
+                <div class="card h-100 shadow-sm border-0 rounded-4 transition">
                     <!-- Cuerpo de la tarjeta -->
                     <div class="card-body">
-                        <h5 class="card-title">@item.Title</h5>
-                        <p class="card-text">
+                        <h5 class="card-title text-dark">@item.Title</h5>
+                        <p class="card-text text-secondary">
                             @((!string.IsNullOrEmpty(item.Content) && item.Content.Length > 100)
                                 ? item.Content.Substring(0, 100) + "..."
                                 : item.Content)
                         </p>
                     </div>
-                    <!-- Pie de la tarjeta con datos de usuario y botones de acción -->
-                    <div class="card-footer d-flex justify-content-between align-items-center">
+                    <!-- Pie de la tarjeta con usuario y acciones -->
+                    <div class="card-footer bg-light d-flex justify-content-between align-items-center rounded-bottom-4 border-0">
                         <small class="text-muted">
-                            <i class="bi bi-person me-1"></i>@item.User.Email
+                            <i class="bi bi-person-circle me-1"></i>@item.User.Email
                         </small>
                         <div class="btn-group btn-group-sm">
                             <a asp-action="Edit" asp-route-id="@item.NoteId" class="btn btn-outline-primary" title="Editar">
@@ -51,17 +56,15 @@
     </div>
 </div>
 
-<!-- Incluimos SortableJS desde CDN -->
+
+<!-- SortableJS para arrastrar tarjetas -->
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var el = document.getElementById('notesBoard');
-        // Inicializamos Sortable en el contenedor de notas
-        var sortable = Sortable.create(el, {
-            animation: 150,         // animación suave
-            ghostClass: 'bg-light'  // clase aplicada al elemento mientras se arrastra
-            // Opcionalmente, puedes agregar eventos como onEnd para capturar el nuevo orden
-            // onEnd: function (evt) { ... }
+        Sortable.create(el, {
+            animation: 150,
+            ghostClass: 'bg-light'
         });
     });
 </script>
