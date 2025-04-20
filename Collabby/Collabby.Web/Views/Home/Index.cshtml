@@ -57,7 +57,7 @@
 
 <!-- HERO BANNER -->
 <section class="hero-banner container-fluid">
-    <h1>CollabBy</h1>
+    <h1>COLLABBY</h1>
     <p>Organiza tus ideas y colabora de forma sencilla.</p>
     <div class="hero-divider"></div>
 </section>
@@ -68,7 +68,7 @@
         <!-- Tarjetas de navegación -->
         <div class="row justify-content-center g-4">
             <!-- Tarjeta de Notas -->
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="card border-0 shadow h-100 hover-shadow">
                     <div class="card-body text-center">
                         <i class="bi bi-journal-richtext display-1 text-primary mb-3"></i>
@@ -80,9 +80,8 @@
                     </div>
                 </div>
             </div>
-
             <!-- Tarjeta de Usuarios -->
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="card border-0 shadow h-100 hover-shadow">
                     <div class="card-body text-center">
                         <i class="bi bi-people display-1 text-success mb-3"></i>
@@ -90,6 +89,19 @@
                         <p class="card-text">Gestiona los usuarios de la aplicación.</p>
                         <a asp-controller="User" asp-action="Index" class="btn btn-success">
                             Ver Usuarios <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- Tarjeta de Proyectos (NUEVA) -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow h-100 hover-shadow">
+                    <div class="card-body text-center">
+                        <i class="bi bi-kanban display-1 text-info mb-3"></i>
+                        <h3 class="card-title">Proyectos</h3>
+                        <p class="card-text">Gestiona tus proyectos facil y de forma dinamica.</p>
+                        <a asp-controller="Project" asp-action="Index" class="btn btn-info text-white">
+                            Ver Proyectos <i class="bi bi-arrow-right ms-1"></i>
                         </a>
                     </div>
                 </div>

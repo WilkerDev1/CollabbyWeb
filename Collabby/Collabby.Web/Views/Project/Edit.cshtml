@@ -1,0 +1,49 @@
+﻿@* Edit.cshtml *@
+@model Collabby.Domain.Entities.Project
+
+@{
+    ViewData["Title"] = "Editar Proyecto";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-header bg-warning text-white rounded-top-4">
+            <h3 class="mb-0"><i class="bi bi-pencil-square me-2"></i> Editar Proyecto</h3>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" asp-for="ProjectId" />
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">Nombre</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label">Descripción</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Objectives" class="form-label">Objetivos</label>
+                    <textarea asp-for="Objectives" class="form-control" rows="5" placeholder="Puedes usar líneas separadas o listas (–, •)"></textarea>
+                    <span asp-validation-for="Objectives" class="text-danger"></span>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary"><i class="bi bi-arrow-left-circle me-1"></i> Volver</a>
+                    <button type="submit" class="btn btn-warning text-white"><i class="bi bi-check-circle me-1"></i> Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,121 @@
+﻿@model IEnumerable<Collabby.Domain.Entities.Project>
+@{
+    ViewData["Title"] = "Proyectos";
+}
+
+<div class="container-fluid mt-4">
+    <!-- Encabezado del tablero -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold text-info">
+            <i class="bi bi-kanban me-2"></i>Proyectos
+        </h1>
+        <a asp-action="Create" class="btn btn-info text-white">
+            <i class="bi bi-plus-circle me-1"></i> Nuevo Proyecto
+        </a>
+    </div>
+
+    <!-- Contenedor de tarjetas drag & drop -->
+    <div class="row" id="projectsBoard">
+        @foreach (var item in Model)
+        {
+            var formattedObjectives = string.Join("\n", item.Objectives?
+            .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+            .Select(line =>
+            {
+                var trimmed = line.Trim();
+                if (trimmed.StartsWith("-") || trimmed.StartsWith("–") || trimmed.StartsWith("•") || trimmed.StartsWith("*"))
+                {
+                    return $"<li>{System.Net.WebUtility.HtmlEncode(trimmed.Substring(1).Trim())}</li>";
+                }
+                return $"<p>{System.Net.WebUtility.HtmlEncode(trimmed)}</p>";
+            }) ?? Array.Empty<string>());
+
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-4 project-item">
+                <div class="card h-100 bg-light border-0 shadow-sm rounded-4 transition">
+                    <div class="card-body p-3">
+                        <h5 class="card-title">@item.Name</h5>
+
+                        <p class="card-text small text-muted">
+                            @((!string.IsNullOrEmpty(item.Description) && item.Description.Length > 80)
+                                ? item.Description.Substring(0, 80) + "..."
+                                : item.Description)
+                        </p>
+
+                        <div class="card-text">
+                            <strong>Objetivos:</strong>
+                            <div class="compact-list mt-2">
+                                @Html.Raw(formattedObjectives.StartsWith("<li>") ? $"<ul>{formattedObjectives}</ul>" : formattedObjectives)
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-footer bg-light d-flex justify-content-between align-items-center border-0 rounded-bottom-4">
+                        <div class="btn-group btn-group-sm">
+                            <a asp-action="Edit" asp-route-id="@item.ProjectId" class="btn btn-outline-secondary" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.ProjectId" class="btn btn-outline-info" title="Detalles">
+                                <i class="bi bi-info-circle"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.ProjectId" class="btn btn-outline-danger" title="Eliminar">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Estilos y scripts para drag & drop -->
+<style>
+    .project-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .project-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+        }
+
+    .transition {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .card-text ul {
+        padding-left: 1.2rem;
+        margin-bottom: 0;
+    }
+
+    .card-text p {
+        margin-bottom: 0.3rem;
+    }
+
+    .compact-list ul,
+    .compact-list p {
+        margin-bottom: 0.3rem;
+    }
+
+    .compact-list li {
+        margin-bottom: 0.3rem;
+        padding-left: 0.2rem;
+    }
+
+    .compact-list ul {
+        padding-left: 1.2rem;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var el = document.getElementById('projectsBoard');
+        Sortable.create(el, {
+            animation: 150,
+            ghostClass: 'bg-light'
+        });
+    });
+</script>

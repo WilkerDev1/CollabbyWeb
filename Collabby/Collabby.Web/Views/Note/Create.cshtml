@@ -7,7 +7,7 @@
 <div class="container mt-5">
     <div class="card shadow-lg rounded-4 border-0">
         <div class="card-header bg-success text-white rounded-top-4">
-            <h3 class="mb-0"><i class="bi bi-journal-plus"></i> Create Note</h3>
+            <h3 class="mb-0"><i class="bi bi-journal-plus"></i> Crear Nota</h3>
         </div>
         <div class="card-body p-4">
             <form asp-action="Create">
@@ -36,11 +36,11 @@
                         <input asp-for="CreatedAt" type="datetime-local" class="form-control" />
                         <span asp-validation-for="CreatedAt" class="text-danger"></span>
                     </div>
-                    <div class="col-md-6">
+                   @*  <div class="col-md-6">
                         <label asp-for="UpdatedAt" class="form-label">Updated At</label>
                         <input asp-for="UpdatedAt" type="datetime-local" class="form-control" />
                         <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-                    </div>
+                    </div> *@
                 </div>
 
                 <div class="mt-4 d-flex justify-content-between">

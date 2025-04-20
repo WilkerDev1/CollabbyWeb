@@ -17,6 +17,9 @@ namespace Collabby.Domain.Entities
 
         // Relación: Una nota pertenece a un usuario
         public User? User { get; set; }
+
+        // NUEVO: Relación opcional con Proyecto
+        public int? ProjectId { get; set; }  // clave foránea opcional
+        public Project? Project { get; set; }  // navegación
     }
 }
-

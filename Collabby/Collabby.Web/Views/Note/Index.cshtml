@@ -3,17 +3,15 @@
     ViewData["Title"] = "Notas";
 }
 
-<!-- Fondo personalizado aplicado desde CSS -->
-
 <div class="container mt-5">
     <!-- Encabezado del tablero -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
         <h1 class="fw-bold text-primary">
             <i class="bi bi-journal-text me-2"></i>Notas
         </h1>
 
         <!-- FAB: botón para crear nueva nota -->
-        <a asp-action="Create" class="btn btn-success fab-top">
+        <a asp-action="Create" class="btn btn-success">
             <i class="bi bi-plus-circle me-1"></i> Crear Nota
         </a>
     </div>
@@ -23,31 +21,34 @@
         @foreach (var item in Model)
         {
             <div class="col-sm-6 col-md-4 col-lg-3 mb-4 note-item">
-                <div class="card h-100 shadow-sm border-0 rounded-4 transition">
+                <div class="card h-100 shadow-sm border-0 rounded-4 transition d-flex flex-column">
                     <!-- Cuerpo de la tarjeta -->
-                    <div class="card-body">
+                    <div class="card-body flex-grow-1">
                         <h5 class="card-title text-dark">@item.Title</h5>
-                        <p class="card-text text-secondary">
-                            @((!string.IsNullOrEmpty(item.Content) && item.Content.Length > 100)
-                                ? item.Content.Substring(0, 100) + "..."
-                                : item.Content)
-                        </p>
+                        <div class="card-text compact-list">
+                            @Html.Raw((!string.IsNullOrEmpty(item.Content) && item.Content.Length > 100)
+                                     ? item.Content.Substring(0, 100) + "..."
+                                     : item.Content)
+                        </div>
                     </div>
+
                     <!-- Pie de la tarjeta con usuario y acciones -->
-                    <div class="card-footer bg-light d-flex justify-content-between align-items-center rounded-bottom-4 border-0">
-                        <small class="text-muted">
-                            <i class="bi bi-person-circle me-1"></i>@item.User.Email
-                        </small>
-                        <div class="btn-group btn-group-sm">
-                            <a asp-action="Edit" asp-route-id="@item.NoteId" class="btn btn-outline-primary" title="Editar">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <a asp-action="Details" asp-route-id="@item.NoteId" class="btn btn-outline-info" title="Detalles">
-                                <i class="bi bi-info-circle"></i>
-                            </a>
-                            <a asp-action="Delete" asp-route-id="@item.NoteId" class="btn btn-outline-danger" title="Eliminar">
-                                <i class="bi bi-trash"></i>
-                            </a>
+                    <div class="card-footer bg-light rounded-bottom-4 border-0">
+                        <div class="d-flex flex-column">
+                            <small class="text-muted mb-2">
+                                <i class="bi bi-person-circle me-1"></i>@item.User.Email
+                            </small>
+                            <div class="btn-group btn-group-sm d-flex justify-content-end">
+                                <a asp-action="Edit" asp-route-id="@item.NoteId" class="btn btn-outline-primary" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="Details" asp-route-id="@item.NoteId" class="btn btn-outline-info" title="Detalles">
+                                    <i class="bi bi-info-circle"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.NoteId" class="btn btn-outline-danger" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -55,7 +56,6 @@
         }
     </div>
 </div>
-
 
 <!-- SortableJS para arrastrar tarjetas -->
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>

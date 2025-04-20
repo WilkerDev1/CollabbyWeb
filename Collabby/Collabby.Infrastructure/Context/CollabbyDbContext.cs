@@ -14,14 +14,12 @@ namespace Collabby.infrastructure.Context
     public class CollabbyContext : DbContext
     {
         public CollabbyContext(DbContextOptions<CollabbyContext> options)
-        : base(options)
+            : base(options)
         {
         }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Note> Notes { get; set; }
-
-
-
+        public DbSet<Project> Projects { get; set; } // <-- ESTA ES LA NUEVA LÍNEA
     }
-
 }

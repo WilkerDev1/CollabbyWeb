@@ -22,7 +22,9 @@ namespace Collabby.Web.Controllers
         // GET: Note
         public async Task<IActionResult> Index()
         {
-            var collabbyContext = _context.Notes.Include(n => n.User);
+            var collabbyContext = _context.Notes
+                .Include(n => n.User)
+                .Include(n => n.Project); // Agregado
             return View(await collabbyContext.ToListAsync());
         }
 
@@ -36,7 +38,9 @@ namespace Collabby.Web.Controllers
 
             var note = await _context.Notes
                 .Include(n => n.User)
+                .Include(n => n.Project) // Agregado
                 .FirstOrDefaultAsync(m => m.NoteId == id);
+
             if (note == null)
             {
                 return NotFound();
@@ -49,15 +53,14 @@ namespace Collabby.Web.Controllers
         public IActionResult Create()
         {
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email");
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "Title"); // Agregado
             return View();
         }
 
         // POST: Note/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("NoteId,UserId,Title,Content,CreatedAt,UpdatedAt")] Note note)
+        public async Task<IActionResult> Create([Bind("NoteId,UserId,ProjectId,Title,Content,CreatedAt,UpdatedAt")] Note note)
         {
             if (ModelState.IsValid)
             {
@@ -66,6 +69,7 @@ namespace Collabby.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email", note.UserId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "Title", note.ProjectId); // Agregado
             return View(note);
         }
 
@@ -82,16 +86,16 @@ namespace Collabby.Web.Controllers
             {
                 return NotFound();
             }
+
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email", note.UserId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "Title", note.ProjectId); // Agregado
             return View(note);
         }
 
         // POST: Note/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("NoteId,UserId,Title,Content,CreatedAt,UpdatedAt")] Note note)
+        public async Task<IActionResult> Edit(int id, [Bind("NoteId,UserId,ProjectId,Title,Content,CreatedAt,UpdatedAt")] Note note)
         {
             if (id != note.NoteId)
             {
@@ -119,6 +123,7 @@ namespace Collabby.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email", note.UserId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "Title", note.ProjectId); // Agregado
             return View(note);
         }
 
@@ -132,7 +137,9 @@ namespace Collabby.Web.Controllers
 
             var note = await _context.Notes
                 .Include(n => n.User)
+                .Include(n => n.Project) // Agregado
                 .FirstOrDefaultAsync(m => m.NoteId == id);
+
             if (note == null)
             {
                 return NotFound();

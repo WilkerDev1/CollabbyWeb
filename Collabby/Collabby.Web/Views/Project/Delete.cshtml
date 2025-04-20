@@ -1,0 +1,54 @@
+﻿@model Collabby.Domain.Entities.Project
+@{
+    ViewData["Title"] = "Delete Project";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-header bg-danger text-white rounded-top-4">
+            <h3 class="mb-0"><i class="bi bi-trash3-fill me-2"></i> Delete Project</h3>
+        </div>
+        <div class="card-body p-4">
+            <div class="alert alert-warning">
+                <strong>!Cuidado¡:</strong> Estas seguro de eliminar este proyecto? Esta accion no se puede <strong>deshacer</strong>
+            </div>
+
+            <dl class="row">
+                <dt class="col-sm-3">Name</dt>
+                <dd class="col-sm-9">@Model.Name</dd>
+
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+
+                <dt class="col-sm-3">Objectives</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrEmpty(Model.Objectives))
+                    {
+                        <ul class="mb-0">
+                            @foreach (var line in Model.Objectives.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                            {
+                                <li>@line</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span class="text-muted">No objectives provided.</span>
+                    }
+                </dd>
+            </dl>
+
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="ProjectId" />
+                <div class="d-flex justify-content-between mt-4">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Back
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash3"></i> Delete
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

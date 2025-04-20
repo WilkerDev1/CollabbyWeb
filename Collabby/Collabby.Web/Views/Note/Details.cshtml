@@ -89,7 +89,7 @@
         <h2>@Model.Title</h2>
         <div class="note-meta">
             Creado: @Model.CreatedAt.ToString("dd MMMM yyyy, HH:mm", cultura) ·
-            Última edición: @Model.UpdatedAt.ToString("dd MMMM yyyy, HH:mm", cultura)<br />
+            @* Última edición: @Model.UpdatedAt.ToString("dd MMMM yyyy, HH:mm", cultura)<br /> *@
             Usuario: <strong>@Model.User.Email</strong>
         </div>
     </div>
